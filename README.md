@@ -94,7 +94,7 @@ are written can also affect the size of the structure when it is allocated.
 
 ### Definition
 A structure can be declared with attributes in the following way:
-```rust
+```c
 struct SomeStruct {
     attribute_1: i32;
     attribute_2: i64;

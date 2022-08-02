@@ -18,7 +18,6 @@ typedef enum {
     TK_ELIF,
     TK_ELSE,
     TK_STRUCT,
-    TK_ASSERT,
     TK_STATIC,
     TK_CONST,
     TK_INLINE,

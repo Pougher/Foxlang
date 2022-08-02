@@ -21,6 +21,7 @@ i32 fib(i32 i){
 }
 
 i32 main(){
+    
     printf("The 10th fibonacci number is: %d\n", fib(9));
     return 0;
 }

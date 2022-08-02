@@ -84,3 +84,28 @@ if (2 == 3) {
     // will run
 }
 ```
+
+## Struct Keyword
+The struct keyword allows for the creation of a custom object that can be referenced without your programs.
+
+### Size
+A structure's size is dictated by the size of the elements it contains. Please note that as well as this, the order in which these attributes
+are written can also affect the size of the structure when it is allocated.
+
+### Definition
+A structure can be declared with attributes in the following way:
+```rust
+struct SomeStruct {
+    attribute_1: i32;
+    attribute_2: i64;
+    attribute_3: u64;
+}
+```
+And variables can be declared as structures:
+```rust
+let structure_variable: SomeStruct = { 0 }; // let must initialize a variable
+structure_variable.attribute_1 = 42;
+structure_variable.attribute_2 = 411;
+structure_variable.attribute_3 = 69;
+```
+

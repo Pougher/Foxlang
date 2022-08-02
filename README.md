@@ -2,6 +2,8 @@
 
 Lightweight programming language written in C++ in under 3000 lines.
 
+*NOTE: README IS CURRENTLY UNDER CONSTRUCTION*
+
 ---
 
 ## Contents

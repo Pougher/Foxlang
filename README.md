@@ -2,8 +2,6 @@
 
 Lightweight programming language written in C++ in under 3000 lines.
 
-[while](#while-keyword)
-
 ---
 
 ## Contents
@@ -51,5 +49,38 @@ while loops as they allow for the iterator to be declared within the loop declar
 ```rust
 for (let i: i32 = 0; i < 10; i++) {
     // ...
+}
+```
+
+## If Keyword
+The if statement executes the code within it's block if the condition provided evalutes to true. As an example, the code below will only run if 10 is
+equal to 10.
+
+```rust
+if (10 == 10) {
+    // ...
+}
+```
+
+## Elif Keyword
+The elif statement only executes code if the above if/elif block(s) have failed to execute. If they have failed to execute, and the condition within the
+elif statement evaluates to true, then the code within the elif statement will execute.
+
+```rust
+if (2 > 5) {
+    // fails to execute
+} elif (5 == 5) {
+    // will execute
+}
+```
+
+## Else Keyword
+The else keyword executes the code in it's block if all of the if statements above have conditions which evaluate to false.
+
+```rust
+if (2 == 3) {
+    // will absolutely not run
+} else {
+    // will run
 }
 ```

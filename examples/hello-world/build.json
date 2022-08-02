@@ -1,0 +1,7 @@
+{
+    "project": {
+        "name": "hello-world",
+        "output": "hello-world",
+        "directory": "build"
+    }
+}

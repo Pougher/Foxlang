@@ -433,7 +433,7 @@ void Parser_t::parse()
             case TK_ELIF: { this->c_program += "else if "; break; }
             case TK_ELSE: { this->c_program += "else "; break; }
             case TK_RETURN: { this->c_program += "return "; break; }
-            case TK_EQUALS: { this->c_program += "= "; break; }
+            case TK_EQUALS: { this->c_program += "="; break; }
             case TK_AMPERSAND: { this->c_program += "&"; break; }
             case TK_OR: { this->c_program += "|"; break; }
             case TK_XOR: { this->c_program += "^"; break; }

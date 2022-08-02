@@ -1,0 +1,12 @@
+extern function printf;
+
+fn fib(i: i32) -> i32 {
+    if (i == 0) return 0;
+    elif (i == 1) return 1;
+    else return (fib(i - 1) + fib(i - 2));
+}
+
+fn main() -> i32 {
+    printf("The 10th fibonacci number is: %d\n", fib(9));
+    return 0;
+}

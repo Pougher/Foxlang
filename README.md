@@ -66,7 +66,7 @@ if (10 == 10) {
 The elif statement only executes code if the above if/elif block(s) have failed to execute. If they have failed to execute, and the condition within the
 elif statement evaluates to true, then the code within the elif statement will execute.
 
-```rust
+```python
 if (2 > 5) {
     // fails to execute
 } elif (5 == 5) {

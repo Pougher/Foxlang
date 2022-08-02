@@ -2,6 +2,8 @@
 
 Lightweight programming language written in C++ in under 3000 lines.
 
+[while](#while-keyword)
+
 ---
 
 ## Contents
@@ -42,7 +44,7 @@ while (i < 10) {
 }
 ```
 
-## For keyword
+## For Keyword
 A for loop allows for the code declared wihtin the loop to be executed any number of times until the condition is no longer true. For loops differ from
 while loops as they allow for the iterator to be declared within the loop declaration.
 

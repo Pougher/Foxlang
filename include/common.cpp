@@ -155,5 +155,11 @@ void Common::usage()
                  "    new:     creates a new fox project in the current working directory\n" <<
                  "    compile: emits a C program based off of the input file\n" <<
                  "    help:    outputs the helpstring for the program\n" <<
+                 "    version: displays the executable version\n" <<
                 std::endl;
+}
+
+const std::string Common::version()
+{
+    return "Fox C transpiler 0.0.2a";
 }

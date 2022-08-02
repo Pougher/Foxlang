@@ -253,7 +253,7 @@ void Parser_t::parse()
                     Token_t& type = this->m_tokens[i + 1];
                     Token_t& iden = this->m_tokens[i + 2];
                     
-                    if ((type.get_type() != TK_FN_EXT && type.get_type() != TK_VR_EXT && type.get_type() != TK_LIB_EXT)
+                    if ((type.get_type() != TK_FN_EXT && type.get_type() != TK_VR_EXT && type.get_type() != TK_LIB_EXT && type.get_type() != TK_TYPE_EXT && type.get_type() != TK_STRUCT_EXT)
                         || (iden.get_type() != TK_IDENTIFIER && iden.get_type() != TK_STRING)) {
                         Error::GenericError_nl(
                                 "Unexpected token while parsing",
@@ -278,9 +278,27 @@ void Parser_t::parse()
                         );
                     }
 
-                    this->m_scope.add_child(
-                             Object_t(identifier, "none", ObjectType_t::OBJ_TYPE_FUNC)
-                    );
+                    switch (type.get_type()) {
+                        case TK_FN_EXT: {
+                            this->m_scope.add_child(
+                                    Object_t(identifier, "none", ObjectType_t::OBJ_TYPE_FUNC)
+                            );
+                            break;
+                        }
+                        case TK_VR_EXT: {
+                            this->m_scope.add_child(
+                                    Object_t(identifier, "none", ObjectType_t::OBJ_TYPE_VAR)
+                            );
+                            break;
+                        }
+                        case TK_STRUCT_EXT: {
+                            this->m_scope.add_child(
+                                    Object_t(identifier, "none", ObjectType_t::OBJ_TYPE_STRUCT)
+                            );
+                            break;
+                        }
+                        default: { break; }
+                    }
                     i += 2;
                 } else {
                     Error::GenericError_nl(
@@ -471,7 +489,7 @@ void Parser_t::parse()
                 this->m_indent_level++;
                 
                 this->m_bracestack.curly_brace.push_back(Brace_t::STRUCTURE);
-                break;                
+                break;
             }
             case TK_UNION: {
                 std::vector<Token_t*> expected = this->expect(
@@ -547,13 +565,31 @@ void Parser_t::parse()
         }
         i ++;
     }
-    if (this->m_indent_level > 0) {
+
+    if (this->m_bracestack.curly_brace.size() > 0) {
+        Error::GenericError_nl(
+                "Unmatched curly braces in file",
+                BRACE_ERROR,
+                0
+        );
+    }
+
+    if (this->m_bracestack.square_brace.size() > 0) {
+        Error::GenericError_nl(
+                "Unmatched square braces in file",
+                BRACE_ERROR,
+                0
+        );
+    }
+
+    if (this->m_bracestack.brace.size() > 0) {
         Error::GenericError_nl(
                 "Unmatched braces in file",
                 BRACE_ERROR,
                 0
         );
     }
+
     this->m_scope.free();
 }
 

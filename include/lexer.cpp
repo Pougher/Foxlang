@@ -121,7 +121,8 @@ void Lexer_t::lex()
                 char delim = this->m_toks[this->m_toks.length() - 1];
                 if (this->m_tokens.size() > 0) {
                     if (this->m_tokens[this->m_tokens.size() - 1].get_type() == TK_STRUCT ||
-                        this->m_tokens[this->m_tokens.size() - 1].get_type() == TK_UNION) {
+                        this->m_tokens[this->m_tokens.size() - 1].get_type() == TK_UNION ||
+                        this->m_tokens[this->m_tokens.size() - 1].get_type() == TK_TYPE_EXT) {
                         FOX_TYPES.insert(tk_copy);
                     }
                 }

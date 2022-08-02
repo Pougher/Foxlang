@@ -63,7 +63,9 @@ typedef enum {
     TK_FN_EXT,
     TK_VR_EXT,
     TK_LIB_EXT,
-    TK_RETURN
+    TK_RETURN,
+    TK_STRUCT_EXT,
+    TK_TYPE_EXT
 } TokenType_t;
 
 /* Type id locations for reference later in code */

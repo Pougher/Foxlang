@@ -78,4 +78,7 @@ namespace Common
 
     /* prints the usage of the executable */
     void usage();
+
+    /* outputs the version of the executable */
+    const std::string version();
 }

@@ -8,6 +8,30 @@ Lightweight programming language written in C++ in under 3000 lines.
 
 ## Contents
 - [keywords](#keywords)
+- [building](#building)
+- [license](#license)
+
+## Building
+
+Firstly, clone the repository:
+```
+$ git clone https://github.com/AxolotlC/Foxlang.git
+```
+
+Then, go to the newly created directory
+```
+$ cd Foxlang
+```
+
+Next, create the CMAKE configuration files
+```
+$ cmake .
+```
+
+Finally, compile the source
+```
+$ make
+```
 
 ## Keywords
 
@@ -32,7 +56,7 @@ Lightweight programming language written in C++ in under 3000 lines.
 
 ---
 
-## While Keyword
+### While Keyword
 A while loop allows for any code declared within the loop to be executed an infinite number of times until a specific condition is no longer met.
 
 For example, the while loop below will execute 10 times before the loop is exited:
@@ -44,7 +68,7 @@ while (i < 10) {
 }
 ```
 
-## For Keyword
+### For Keyword
 A for loop allows for the code declared wihtin the loop to be executed any number of times until the condition is no longer true. For loops differ from
 while loops as they allow for the iterator to be declared within the loop declaration.
 
@@ -54,7 +78,7 @@ for (let i: i32 = 0; i < 10; i++) {
 }
 ```
 
-## If Keyword
+### If Keyword
 The if statement executes the code within it's block if the condition provided evalutes to true. As an example, the code below will only run if 10 is
 equal to 10.
 
@@ -64,7 +88,7 @@ if (10 == 10) {
 }
 ```
 
-## Elif Keyword
+### Elif Keyword
 The elif statement only executes code if the above if/elif block(s) have failed to execute. If they have failed to execute, and the condition within the
 elif statement evaluates to true, then the code within the elif statement will execute.
 
@@ -76,7 +100,7 @@ if (2 > 5) {
 }
 ```
 
-## Else Keyword
+### Else Keyword
 The else keyword executes the code in it's block if all of the if statements above have conditions which evaluate to false.
 
 ```rust
@@ -87,14 +111,14 @@ if (2 == 3) {
 }
 ```
 
-## Struct Keyword
+### Struct Keyword
 The struct keyword allows for the creation of a custom object that can be referenced without your programs.
 
-### Size
+#### Size
 A structure's size is dictated by the size of the elements it contains. Please note that as well as this, the order in which these attributes
 are written can also affect the size of the structure when it is allocated.
 
-### Definition
+#### Definition
 A structure can be declared with attributes in the following way:
 ```c
 struct SomeStruct {
@@ -111,7 +135,7 @@ structure_variable.attribute_2 = 411;
 structure_variable.attribute_3 = 69;
 ```
 
-## Static Keyword
+### Static Keyword
 A variable declared as static exists for the lifetime of the translation unit that it is defined in.
 This allows the variable to posess the following properties:
 - If the variable is within a function, it may be accessed from outside the function.
@@ -130,7 +154,7 @@ fn main() -> void {
 }
 ```
 
-## Const Keyword
+### Const Keyword
 A constant variable means that the variable is internally marked as immutable, meaning the value of the variable cannot be changed
 and therefore may be used to optimize certain procedures.
 
@@ -140,7 +164,7 @@ const let x: i32 = 42;
 x = 20; // error
 ```
 
-## Inline Keyword
+### Inline Keyword
 If a function is declared as inline, then whenever the function is called, the function body will be inserted into the generated executable instead
 of the function being called. This means that inlining functions could increase the program size, but could also reduce the program size if the generated
 function call is larger than inserting the function's body.
@@ -162,7 +186,7 @@ This results in:
 50 * 50;
 ```
 
-## Volatile Keyword
+### Volatile Keyword
 Volatile indicates to the compiler that it should not attempt to optimize any code that deals with a volatile variable.
 
 As an example, writing to 0xB8000 on a device that uses a VGA driver will write directly to screen memory. To prevent this code from
@@ -174,7 +198,7 @@ being optimized, it must be declared as volatile:
 
 > Above program writes 0x41 to address 0xB8000, resulting in the character 'A' appearing in the top left of the screen.
 
-## Union Keyword
+### Union Keyword
 
 A union is similar to a structure except unions have a size limited to the size of the largest element. Furthermore, all memory allocated
 to a union may be modified by accessing each element of the union.
@@ -211,7 +235,7 @@ UnionVariable.element_2; // -> 0xC0DE
 UnionVariable.element_3; // -> 0x0000C0DE
 ```
 
-## Binary Operators
+### Binary Operators
 Binary operators perform binary manipulation on values.
 
 - The and operator (`and`) performs a bitwise and on two values: `0011 and 1101 = 0001`
@@ -219,7 +243,7 @@ Binary operators perform binary manipulation on values.
 - The xor operator (`xor`) performs a bitwise xor on two values: `1101 xor 0100 = 1001`
 - The not operator (`not`) performs a binary negation on one value: `not 1010 = 0101`
 
-## Variable Declaration
+### Variable Declaration
 The let keyword allows for variables to be declared. A let declaration must take the following form: `let <identifier>: <type> = <value>`.
 All variables declared with let must be initialized, and therefore for user defined types, the zero memory operator must be used (`{ 0 }`)
 
@@ -233,7 +257,7 @@ However, to declare X as a structure type, you would do the following:
 let X: SomeStruct = { 0 };
 ```
 
-## Function Declaration
+### Function Declaration
 
 Functions must be defined as having a type and a name, as well as having zero or more positional arguments.
 They must take the form `fn <identifier>(<arguments>) -> <return type> { ... }`
@@ -251,7 +275,7 @@ hello();
 // -> Hello, world!
 ```
 
-## Interfacing With C
+### Interfacing With C
 As this language is built on top of C, there is a way to interface with existing C libraries.
 For example, if I had the following file in C and wished to interface it in Fox, you could do the following:
 
@@ -292,7 +316,7 @@ The following things may be interfaced with Fox:
 - Structures (union and struct): `extern structure <identifier>`
 - Variables: `extern variable <identifier>`
 
-# Namespaces
+### Namespaces
 Namespaces are a Fox exclusive feature. Namespaces allow for functions or variables to be grouped based off of their
 purpose or a common task that they perform. All namespaces are also scoped and so any variable or function declared
 within a namespace may not be accessed outside of a namespace.
@@ -332,3 +356,8 @@ SomeNamespace::namespace_function();
 
 SomeNamespace_namespace_functionqW8734aL2E();
 ```
+
+## License
+
+This repository is under the GNU General Public License
+Click here for the [license](LICENSE.md)

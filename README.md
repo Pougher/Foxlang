@@ -161,3 +161,15 @@ This results in:
 ```rust
 50 * 50;
 ```
+
+## Volatile
+Volatile indicates to the compiler that it should not attempt to optimize any code that deals with a volatile variable.
+
+As an example, writing to 0xB8000 on a device that uses a VGA driver will write directly to screen memory. To prevent this code from
+being optimized, it must be declared as volatile:
+
+```C
+*((volatile i8*) 0xB8000) = 0x41;
+```
+
+> Above program writes 0x41 to address 0xB8000, resulting in the character 'A' appearing in the top left of the screen.

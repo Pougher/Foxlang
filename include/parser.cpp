@@ -427,6 +427,7 @@ void Parser_t::parse()
             case TK_CONST: { this->c_program += "const "; break; }
             case TK_STATIC: { this->c_program += "static "; break; }
             case TK_VOLATILE: { this->c_program += "volatile "; break; }
+            case TK_INLINE: { this->c_program += "inline "; break; }
             case TK_FOR: { this->c_program += "for "; break; }
             case TK_WHILE: { this->c_program += "while "; break; }
             case TK_IF: { this->c_program += "if "; break; }

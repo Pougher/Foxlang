@@ -20,8 +20,11 @@ i32 fib(i32 i){
     else return (fib(i-1)+fib(i-2));
 }
 
+inline i32 test(){
+    return 20;
+}
+
 i32 main(){
-    
     printf("The 10th fibonacci number is: %d\n", fib(9));
     return 0;
 }

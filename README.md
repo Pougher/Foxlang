@@ -111,3 +111,53 @@ structure_variable.attribute_2 = 411;
 structure_variable.attribute_3 = 69;
 ```
 
+## Static Keyword
+A variable declared as static exists for the lifetime of the translation unit that it is defined in.
+This allows the variable to posess the following properties:
+- If the variable is within a function, it may be accessed from outside the function.
+- The variable is stored in static storage.
+- If the variable is defined outside of a function, then it can't be accessed from any other translation unit.
+
+```rust
+fn test() -> void {
+    static let x: i32 = 42;
+}
+
+// ...
+
+fn main() -> void {
+    printf("x = %d\n", x);
+}
+```
+
+## Const Keyword
+A constant variable means that the variable is internally marked as immutable, meaning the value of the variable cannot be changed
+and therefore may be used to optimize certain procedures.
+
+```rust
+const let x: i32 = 42;
+
+x = 20; // error
+```
+
+## Inline Keyword
+If a function is declared as inline, then whenever the function is called, the function body will be inserted into the generated executable instead
+of the function being called. This means that inlining functions could increase the program size, but could also reduce the program size if the generated
+function call is larger than inserting the function's body.
+
+Furthermore, another benefit of inlining is a performance increase, as in some scenarios where speed matters, inlining a function would remove an unnessecary
+call to jump, therefore increasing the speed of the program fractionally.
+
+```rust
+inline fn test() -> i32 {
+    return 50 * 50;
+}
+
+// ...
+
+test();
+```
+This results in:
+```rust
+50 * 50;
+```

@@ -36,6 +36,6 @@ void Error::GenericError_nl(
 {
     std::cerr << err << " on line " << line << ":\n    " << \
         msg << std::endl;
-    
+
     if (fatal) std::exit(1);
 }

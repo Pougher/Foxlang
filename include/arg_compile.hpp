@@ -33,6 +33,7 @@ class ArgumentActionCompile_t : public ArgumentAction_t {
 
     std::string docstring() override
     {
-        return "fox [compile] <name>\n    compile: emits a C program based off of the input file";
+        return "fox [compile] <name>\n    compile: emits a C program based off "
+            "of the input file";
     }
 };

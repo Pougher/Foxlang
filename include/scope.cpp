@@ -1,4 +1,4 @@
-#include <scope.hpp>
+#include "scope.hpp"
 
 Object_t::Object_t(std::string name, std::string type, ObjectType_t obj_type)
 {
@@ -9,7 +9,8 @@ Object_t::Object_t(std::string name, std::string type, ObjectType_t obj_type)
 
 Scope_t::Scope_t()
 {
-    Object_t* new_obj = new Object_t("GLOBAL", "NONE", ObjectType_t::OBJ_TYPE_STRUCT);
+    Object_t* new_obj = new Object_t("GLOBAL", "NONE",
+        ObjectType_t::OBJ_TYPE_STRUCT);
     new_obj->parent = nullptr;
     this->current_object = new_obj;
 }
@@ -131,12 +132,14 @@ void Scope_t::print()
 void Scope_t::recursive_print(Object_t* root, unsigned long tab_count)
 {
     if (root->children.size() > 0) {
-        std::cout << std::string(tab_count * 4, ' ') << root->name << " | " << root->type << " | " << root->obj_type << std::endl;
+        std::cout << std::string(tab_count * 4, ' ') << root->name << " | " \
+            << root->type << " | " << root->obj_type << std::endl;
         for (auto x : root->children) {
             this->recursive_print(x, tab_count + 1);
         }
     } else {
-        std::cout << std::string(tab_count * 4, ' ') << root->name << " | " << root->type << " | " << root->obj_type << std::endl;
+        std::cout << std::string(tab_count * 4, ' ') << root->name << " | " << \
+            root->type << " | " << root->obj_type << std::endl;
     }
 }
 
@@ -144,7 +147,7 @@ std::vector<std::string> Scope_t::collect()
 {
     std::vector<std::string> ret;
     Object_t* head = this->current_object;
-    
+
     do {
         for (auto obj : head->children) {
             ret.push_back(obj->name);

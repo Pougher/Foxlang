@@ -12,12 +12,12 @@ enum Brace_t {
 
 /* struct for the various types of brace, such as curly braces,
  * (`{` and `}`), square braces, (`[` and `]`), and regular
- * parenthesis (`(` and `)`). */ 
+ * parenthesis (`(` and `)`). */
 struct BraceStack_t {
     std::vector<Brace_t> curly_brace;
     std::vector<Brace_t> square_brace;
     std::vector<Brace_t> brace;
-  
+
     Brace_t curly_brace_top()
     {
         if (this->curly_brace.size() == 0) return Brace_t::NONE;
@@ -29,7 +29,7 @@ struct BraceStack_t {
         if (this->square_brace.size() == 0) return Brace_t::NONE;
         return this->square_brace[this->square_brace.size() - 1];
     }
-  
+
     Brace_t brace_top()
     {
         if (this->brace.size() == 0) return Brace_t::NONE;

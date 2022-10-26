@@ -4,9 +4,10 @@ std::string File::load_file(const char* filename)
 {
     std::ifstream file(filename);
     std::stringstream stream;
-    
+
     if (!file.good()) {
-        std::cerr << "IOError: File '" << filename << "' could not be opened" << std::endl;
+        std::cerr << "IOError: File '" << filename << "' could not be opened" \
+            << std::endl;
         std::exit(1);
     }
 

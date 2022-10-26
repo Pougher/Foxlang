@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 /* class to be overidden and have functionality added on top of it.
  * `requirements()` must return true if the number of arguments
  * remaining is equal to the number of arguments required by the action.

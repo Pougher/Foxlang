@@ -18,9 +18,11 @@ BuildParser_t::BuildParser_t(const char* filename)
         file_json["project"].contains("name") &&
         file_json["project"].contains("output") &&
         file_json["project"].contains("directory"))) {
-        std::cerr << JSON_ERROR << ":\n" << "    build.json must contain `project` object with the" <<
+        std::cerr << JSON_ERROR << ":\n" << "    build.json must contain "
+            "`project` object with the" <<
             " following attributes:\n" <<
-            "{\n    \"project\": {\n        \"output\": <value>,\n        \"name\": <value>,\n        \"directory\": <value>\n    }\n}"
+            "{\n    \"project\": {\n        \"output\": <value>,\n        "
+            "\"name\": <value>,\n        \"directory\": <value>\n    }\n}"
             << std::endl;
         std::exit(1);
     }
@@ -42,7 +44,8 @@ void BuildParser_t::generate()
         std::filesystem::create_directories(name);
     }
     for (unsigned int i = 0; i < PROJECT_DEFAULT_FILES.size(); i++) {
-        File::write_file(PROJECT_DEFAULT_FILES[i], PROJECT_DEFAULT_FILE_CONTENTS[i]);
+        File::write_file(PROJECT_DEFAULT_FILES[i],
+            PROJECT_DEFAULT_FILE_CONTENTS[i]);
     }
 
     // write the project json
@@ -53,9 +56,12 @@ const std::string BuildParser_t::generate_build_json()
 {
     const std::string json = "{\n"
                              "    \"project\": {\n"
-                             "        \"name\": \"" + this->project_name + "\",\n"
-                             "        \"output\": \"" + this->output_name + "\",\n"
-                             "        \"directory\": \"" + this->output_dir + "\"\n"
+                             "        \"name\": \"" + this->project_name + \
+                                "\",\n"
+                             "        \"output\": \"" + this->output_name + \
+                                "\",\n"
+                             "        \"directory\": \"" + this->output_dir + \
+                             "\"\n"
                              "    }\n"
                              "}\n";
     return json;

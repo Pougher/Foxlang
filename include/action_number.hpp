@@ -14,7 +14,8 @@ public:
     /* destructor */
     ~ActionNumber_t();
     /* override of parent class */
-    void update(toks_t toks, State_t<bool>& state, std::vector<Token_t>& tokens, char current_char);
+    void update(toks_t toks, State_t<bool>& state, std::vector<Token_t>& tokens,
+                char current_char);
 private:
     std::string m_expr;
 };

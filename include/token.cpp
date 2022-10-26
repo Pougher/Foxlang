@@ -20,20 +20,23 @@ void Token_t::print()
                 std::cout << "double data: " << std::get<double>(x) << "\n";
                 break;
             case STRING_TYPE_ID:
-                std::cout << "string data: " << std::get<std::string>(x) << "\n";
+                std::cout << "string data: " << std::get<std::string>(x) << \
+                    "\n";
                 break;
             case BOOL_TYPE_ID:
                 std::cout << "bool data: " << std::get<bool>(x) << "\n";
                 break;
             case VOID_PTR_TYPE_ID:
-                std::cout << "void* pointer: 0x" << (unsigned long) std::get<void*>(x) << std::dec << "\n";
+                std::cout << "void* pointer: 0x" << \
+                    (unsigned long) std::get<void*>(x) << std::dec << "\n";
                 break;
             default:
                 std::cout << "Unknown type information found.\n";
                 break;
         }
     }
-    std::cout << "-------------------------" << std::endl; // Flush std::cout buffer
+    // Flush std::cout buffer
+    std::cout << "-------------------------" << std::endl;
 }
 
 Token_t::Token_t(TokenType_t t)

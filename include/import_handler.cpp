@@ -4,11 +4,12 @@ const std::string ImportHandler::parse(std::string& str)
 {
     std::vector<std::string> already_included;
     std::string result = ImportHandler::recursive_parse(str, already_included);
-    
+
     return result;
 }
 
-const std::string ImportHandler::recursive_parse(std::string& str, std::vector<std::string>& already_included)
+const std::string ImportHandler::recursive_parse(std::string& str,
+    std::vector<std::string>& already_included)
 {
     std::string toks = "";
     std::string import_string = "";
@@ -17,7 +18,7 @@ const std::string ImportHandler::recursive_parse(std::string& str, std::vector<s
     bool import_active = false;
     long line = 1;
     unsigned char skip = 0;
-    
+
     for (char c : str) {
         if (skip) {
             skip --;
@@ -36,7 +37,8 @@ const std::string ImportHandler::recursive_parse(std::string& str, std::vector<s
             if (c == ' ' || c == '\t') {
                 // there should not be any whitespace characters in an import
                 Error::GenericError_nl(
-                        "Whitespace should not be present in an import statement",
+                        "Whitespace should not be present in an import"
+                        "statement",
                         IMPORT_ERROR,
                         line
                 );
@@ -51,29 +53,32 @@ const std::string ImportHandler::recursive_parse(std::string& str, std::vector<s
                         line
                 );
             }
-            
+
             if (!std::filesystem::exists(import_string)) {
                 Error::GenericError_nl(
-                        std::string("Could not find file for import: '") + import_string + "'",
+                        std::string("Could not find file for import: '") + \
+                        import_string + "'",
                         IO_ERROR,
                         line
                 );
             }
-            
-            if (std::find(already_included.begin(), already_included.end(), import_string) != already_included.end()) {
+
+            if (std::find(already_included.begin(), already_included.end(),
+                import_string) != already_included.end()) {
                 import_string = "";
                 import_active = false;
                 continue;
             }
-            
+
             already_included.push_back(import_string);
             std::string loaded_file = File::load_file(import_string.c_str());
-                        
-            completed_file += "\n" + ImportHandler::recursive_parse(loaded_file, already_included) + "\n";
+
+            completed_file += "\n" + ImportHandler::recursive_parse(loaded_file,
+                already_included) + "\n";
             import_string = "";
             import_active = false;
         }
-        
+
         if (c == '\n') {
             toks = "";
             completed_file += back_buffer;

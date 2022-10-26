@@ -9,10 +9,13 @@
 #include <cstdlib>
 
 /* Macro for checking if the current token in a delimiter or not */
-#define IS_DELIM(x) (x == ',' || x == '.' || x == '*' || x == '+' || x == '/' || x == '-' || x == ' ' || x == '\n'     \
-        || x == '[' || x == ']' || x == '{' || x == '}' || x == '%' || x == '\r' || x == '\t' || x == '<' || x == ';' \
-        || x == '>' || x == ':' || x == '^' || x == '&' || x == '~' || x == '(' || x == ')' || x == '=' || x == '\''   \
-        || x == '"' )
+#define IS_DELIM(x) (x == ',' || x == '.' || x == '*' || x == '+' ||   \
+                     x == '/' || x == '-' || x == ' ' || x == '\n' ||  \
+                     x == '[' || x == ']' || x == '{' || x == '}' ||   \
+                     x == '%' || x == '\r' || x == '\t' || x == '<' || \
+                     x == ';' || x == '>' || x == ':' || x == '^' ||   \
+                     x == '&' || x == '~' || x == '(' || x == ')' ||   \
+                     x == '=' || x == '\''|| x == '"' )
 
 /* Macro for checking if the current token is a whitespace character or not */
 #define IS_WHITESPACE(x) (x == '\t' || x == '\r' || x == '\n' || x == ' ')
@@ -74,7 +77,8 @@ namespace Common
     const std::string garbage(unsigned int mangle_len);
 
     /* replace any appearances of `from` in `str` with`to` */
-    void replace(std::string& str, const std::string& from, const std::string& to);
+    void replace(std::string& str, const std::string& from,
+                 const std::string& to);
 
     /* prints the usage of the executable */
     void usage();

@@ -8,7 +8,8 @@ ActionString_t::ActionString_t()
     this->m_expr = "";
 }
 
-void ActionString_t::update(toks_t toks, State_t<bool>& state, std::vector<Token_t>& tokens, char current_char)
+void ActionString_t::update(toks_t toks, State_t<bool>& state,
+    std::vector<Token_t>& tokens, char current_char)
 {
     if (!state["any_active"] && current_char == '"') {
         state.set("any_active", true);

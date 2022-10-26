@@ -38,32 +38,36 @@ struct Object_t {
  * to the tree of `Object_t`s. */
 class Scope_t {
 public:
-    Scope_t();                                      /* constructor */
+    Scope_t();                      /* constructor */
 
-    void add_child(Object_t obj);                   /* function to add a child to the tree */
-    void free();                                    /* function to free all memory allocated */
+    void add_child(Object_t obj);   /* function to add a child to the tree */
+    void free();                /* function to free all memory allocated */
 
     /* moves the current object to the object with the name attribute "name". */
     bool traverse(const std::string& name);
-    /* moves the current object to the parent of the current object. If the parent
-     * is a nullptr, then no move takes place. */
+    /* moves the current object to the parent of the current object. If the
+     * parent is a nullptr, then no move takes place. */
     bool traverse_back();
-    /* checks if the current node's children contains a node with the name `name`. */
+    /* checks if the current node's children contains a node with the name
+     * `name`. */
     bool contains_node(const std::string& name);
-    /* checks recursively if the entire tree contains a node with the name `name`. */
+    /* checks recursively if the entire tree contains a node with the name
+     * `name`. */
     bool has_node(const std::string& name);
     /* checks if the tree contains the node `name` by traversing upwards until
-     * the global scope is reached. If the node is found, an Object_t* is returned */
+     * the global scope is reached. If the node is found, an Object_t* is
+     * returned */
     Object_t* contains_node_up(const std::string& name);
-    Object_t* get();                                /* returns `current_object` */
-    void print();                                   /* prints the entire tree */
-    void push();                                    /* pushes `current_object` to the stack */
-    void pop();                                     /* pops an Object_t* from the stack and sets `current_object` */
-    void set(Object_t* root);                       /* sets `current_object` to `root` */
+    Object_t* get();                /* returns `current_object` */
+    void print();                   /* prints the entire tree */
+    void push();                    /* pushes `current_object` to the stack */
+    /* pops an Object_t* from the stack and sets `current_object` */
+    void pop();
+    void set(Object_t* root);       /* sets `current_object` to `root` */
     /* collects the names of all objects above `current_object` */
     std::vector<std::string> collect();
 private:
-    Object_t* current_object;                       /* the current object in use */
+    Object_t* current_object;       /* the current object in use */
 
     /* recursive function to free all children of `root` */
     void free_tree(Object_t* root);

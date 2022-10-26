@@ -64,7 +64,8 @@ void Common::common_assert(bool cond, std::string& err, bool fatal = true)
 bool Common::numeric_string(const std::string& s)
 {
     return !s.empty() && std::find_if(s.begin(),
-            s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
+            s.end(), [](unsigned char c) { return !std::isdigit(c); }) ==
+                s.end();
 }
 
 std::string Common::c_filename(const std::string& old_filename)
@@ -115,10 +116,12 @@ const std::string Common::default_c(bool nostd)
            "typedef double f64;\n\n";
 }
 
-const std::string Common::brace_scope_name(std::vector<std::string>& alr_defined)
+const std::string Common::brace_scope_name(
+    std::vector<std::string>& alr_defined)
 {
     std::string name = "brace_scope_" + std::to_string(g_common_brace_count);
-    while (std::find(alr_defined.begin(), alr_defined.end(), name) != alr_defined.end()) {
+    while (std::find(alr_defined.begin(), alr_defined.end(), name) !=
+           alr_defined.end()) {
         g_common_brace_count ++;
         name = "brace_scope_overflow_" + std::to_string(g_common_brace_count);
     }
@@ -130,7 +133,8 @@ const std::string Common::garbage(unsigned int mangle_len)
 {
     std::string mangle_str = "";
     for (unsigned int i = 0; i < mangle_len; i++) {
-        mangle_str += COMMON_ALPHANUMERICS[rand() % COMMON_ALPHANUMERICS.size()];
+        mangle_str += COMMON_ALPHANUMERICS[
+            rand() % COMMON_ALPHANUMERICS.size()];
     }
 
     return mangle_str;
@@ -142,7 +146,8 @@ void Common::replace(std::string& str, const std::string& from, const std::strin
     size_t start_pos = 0;
     while((start_pos = str.find(from, start_pos)) != std::string::npos) {
         str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+        start_pos += to.length(); // In case 'to' contains 'from', like
+                                  // replacing 'x' with 'yx'
     }
 }
 
@@ -152,9 +157,10 @@ void Common::usage()
                  "       Emits C programs based off of a fox program\n" <<
                  "\nOptions:\n\n" <<
                  "    build:   compiles a fox project within a directory\n"  <<
-                 "    new:     creates a new fox project in the current working directory\n" <<
-                 "    compile: emits a C program based off of the input file\n" <<
-                 "    help:    outputs the helpstring for the program\n" <<
+                 "    new:     creates a new fox project in the current "
+                 "working directory\n" <<
+                 "    compile: emits a C program based off of the input file\n"
+                 << "    help:    outputs the helpstring for the program\n" <<
                  "    version: displays the executable version\n" <<
                 std::endl;
 }

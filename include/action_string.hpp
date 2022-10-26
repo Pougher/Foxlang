@@ -12,7 +12,8 @@ public:
     /* destructor */
     ~ActionString_t();
     /* override of parent class */
-    void update(toks_t toks, State_t<bool>& state, std::vector<Token_t>& tokens, char current_char);
+    void update(toks_t toks, State_t<bool>& state, std::vector<Token_t>& tokens,
+                char current_char);
 private:
     /* variable for storing the current string data */
     std::string m_expr;

@@ -92,7 +92,7 @@ public:
         return this->m_data[i];
     }
 
-    void print();                           /* function to print all token data */
+    void print();   /* function to print all token data */
 private:
     /* Heterogeneous std::vector for storing data.
      * void* is for pointers to token lore objects. */

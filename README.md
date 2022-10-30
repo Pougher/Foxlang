@@ -2,7 +2,7 @@
 
 Lightweight programming language written in C++ in under 4000 lines.
 
-### Current Version: 1.0.2a2
+### Current Source Version: 1.0.2a4
 
 ---
 
@@ -10,3 +10,4 @@ Lightweight programming language written in C++ in under 4000 lines.
 - [keywords](docs/keywords.md)
 - [building](docs/building.md)
 - [license](docs/license.md)
+- [upcoming features](docs/features.md)

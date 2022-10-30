@@ -87,6 +87,27 @@ std::string Common::c_filename(const std::string& old_filename)
     return file_name + ".c";
 }
 
+std::string Common::replace_extension(const std::string& old_filename,
+    const std::string& extension)
+{
+    std::string file_name = "";
+    unsigned int num_dots = 0;
+    unsigned int cur_dots = 0;
+
+    for (auto c : old_filename) { if (c == '.') num_dots++; }
+
+    for (auto c : old_filename) {
+        if (c == '.') {
+            if (cur_dots == (num_dots - 1)) break;
+            cur_dots ++;
+        }
+        file_name += c;
+    }
+
+    return file_name + extension;
+
+}
+
 const std::string Common::default_c(bool nostd)
 {
     if (nostd) {
@@ -140,7 +161,8 @@ const std::string Common::garbage(unsigned int mangle_len)
     return mangle_str;
 }
 
-void Common::replace(std::string& str, const std::string& from, const std::string& to)
+void Common::replace(std::string& str, const std::string& from,
+    const std::string& to)
 {
     if (from.empty()) return;
     size_t start_pos = 0;
@@ -167,5 +189,19 @@ void Common::usage()
 
 const std::string Common::version()
 {
-    return "Fox C transpiler 0.0.2a";
+    return "Fox C transpiler 1.0.2a4";
+}
+
+const std::string Common::file_extension(const std::string& ft)
+{
+    if (ft == "C") return ".c";
+    if (ft == "CPP") return ".cpp";
+    if (ft == "C++") return ".cpp";
+    if (ft == "CXX") return ".cpp";
+    if (ft == "CC") return ".cpp";
+    if (ft == "RUST") return ".rs";
+    if (ft == "JS") return ".js";
+    if (ft == "TS") return ".ts";
+    if (ft == "PYTHON") return ".py";
+    return "unknown-ft";
 }

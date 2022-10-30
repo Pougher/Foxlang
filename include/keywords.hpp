@@ -69,7 +69,6 @@ static std::set<std::string> FOX_TYPES {
     "u32",
     "u16",
     "u8",
-    "char",
     "bool",
     "f64",
     "f32",

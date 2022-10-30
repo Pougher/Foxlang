@@ -10,7 +10,8 @@ Lexer_t::Lexer_t(std::string& file)
     // init lexer m_actions
     this->m_actions.insert(this->m_actions.end(), {
             new ActionString_t(),
-            new ActionNumber_t()
+            new ActionNumber_t(),
+            new ActionChar_t()
         }
     );
 }
@@ -106,10 +107,10 @@ void Lexer_t::lex()
 
         for (auto& action : this->m_actions) {
             action->update(
-                    construct_toks_t(this->m_toks, this->m_ftoks),
-                    this->m_state,
-                    this->m_tokens,
-                    this->m_file[i]
+                construct_toks_t(this->m_toks, this->m_ftoks),
+                this->m_state,
+                this->m_tokens,
+                this->m_file[i]
             );
         }
 

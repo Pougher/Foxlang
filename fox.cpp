@@ -9,6 +9,7 @@
 #include "include/arg_new.hpp"
 #include "include/arg_compile.hpp"
 #include "include/arg_version.hpp"
+#include "include/command_exec.hpp"
 
 int main(int argc, char** argv)
 {

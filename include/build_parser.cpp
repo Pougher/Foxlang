@@ -17,12 +17,18 @@ BuildParser_t::BuildParser_t(const char* filename)
     if (!(file_json.contains("project") &&
         file_json["project"].contains("name") &&
         file_json["project"].contains("output") &&
-        file_json["project"].contains("directory"))) {
+        file_json["project"].contains("directory") &&
+        file_json.contains("run_compile_command") &&
+        file_json.contains("compile_command") &&
+        file_json.contains("compile_options"))) {
         std::cerr << JSON_ERROR << ":\n" << "    build.json must contain "
             "`project` object with the" <<
             " following attributes:\n" <<
             "{\n    \"project\": {\n        \"output\": <value>,\n        "
-            "\"name\": <value>,\n        \"directory\": <value>\n    }\n}"
+            "\"name\": <value>,\n        \"directory\": <value>\n    },\n"
+            "    \"run_compile_command\": <bool>,\n    \"compile_command\""
+            ": <value>,\n    \"compile_options\": []\n"
+            "}"
             << std::endl;
         std::exit(1);
     }
@@ -30,6 +36,33 @@ BuildParser_t::BuildParser_t(const char* filename)
     this->project_name = this->strip_quotes(file_json["project"]["name"]);
     this->output_name  = this->strip_quotes(file_json["project"]["output"]);
     this->output_dir   = this->strip_quotes(file_json["project"]["directory"]);
+
+    // compile options
+    this->compile_options = this->to_vector(file_json["compile_options"]);
+    this->run_compile_command = file_json["run_compile_command"];
+    this->compile_command = this->strip_quotes(file_json["compile_command"]);
+
+    if (file_json.contains("output_type")) {
+        const std::string output_type_before = file_json["output_type"];
+        std::string output_type = "";
+
+        for (char c : output_type_before) {
+            output_type += std::toupper(c);
+        }
+
+        if (!(output_type == "C" || output_type == "C++" ||
+              output_type == "CPP" || output_type == "CXX" ||
+              output_type == "CC")) {
+            // invalid output type
+            std::cerr << "Error: Invalid output type '" << output_type_before <<
+                "'" << std::endl;
+            std::exit(-1);
+        }
+
+        this->output_type = output_type;
+    } else {
+        this->output_type = "C"; // default
+    }
 }
 
 std::string BuildParser_t::strip_quotes(std::string str)
@@ -43,6 +76,11 @@ void BuildParser_t::generate()
     for (auto name : PROJECT_DIR_NAMES) {
         std::filesystem::create_directories(name);
     }
+
+    for (unsigned int i = 0; i < NUM_STANDARD_FILES; i++) {
+        File::write_file(STANDARD_FILES[i], STANDARD_LIB_FILES[i]);
+    }
+
     for (unsigned int i = 0; i < PROJECT_DEFAULT_FILES.size(); i++) {
         File::write_file(PROJECT_DEFAULT_FILES[i],
             PROJECT_DEFAULT_FILE_CONTENTS[i]);
@@ -62,7 +100,10 @@ const std::string BuildParser_t::generate_build_json()
                                 "\",\n"
                              "        \"directory\": \"" + this->output_dir + \
                              "\"\n"
-                             "    }\n"
+                             "    },\n"
+                             "    \"run_compile_command\": true,\n"
+                             "    \"compile_command\": \"clang\",\n"
+                             "    \"compile_options\": [ \"-O3\" ]\n"
                              "}\n";
     return json;
 }
@@ -76,6 +117,22 @@ void BuildParser_t::set_attributes(const std::string& name,
     this->output_dir = out_dir;
 }
 
+std::vector<std::string> BuildParser_t::to_vector(Json_t& json)
+{
+    std::vector<std::string> strings;
+    for (unsigned int i = 0; i < json.size(); i++) {
+        strings.push_back(this->strip_quotes(json[i]));
+    }
+
+    return strings;
+}
+
 std::string& BuildParser_t::get_project_name() { return this->project_name; }
 std::string& BuildParser_t::get_output_name() { return this->output_name; }
 std::string& BuildParser_t::get_output_dir() { return this->output_dir; }
+std::string& BuildParser_t::get_output_type() { return this->output_type; }
+std::vector<std::string>& BuildParser_t::get_compile_options()
+{ return this->compile_options; }
+bool BuildParser_t::get_run_command() { return this->run_compile_command; }
+std::string& BuildParser_t::get_compile_command()
+{ return this->compile_command; }

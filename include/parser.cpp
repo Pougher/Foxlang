@@ -30,20 +30,19 @@ void Parser_t::parse()
         switch (tok_type) {
             case TK_LET: {
                 std::vector<Token_t*> needed = this->expect(
-                        &i,
-                        PARSER_EXPECT_VARIABLE_DECL,
-                        "Variable let declaration requires an identifier, a "
-                        "type and an assignment."
+                    &i,
+                    PARSER_EXPECT_VARIABLE_DECL,
+                    ErrorMessage::VARIABLE_LET_ERROR
                 );
 
                 if (this->m_scope.contains_node_up(std::get<std::string>(
                             (*needed[0])[0]))) {
                     // variable redefinition error
                     Error::GenericError_nl(
-                            "Identifier already declared: '" + \
-                            std::get<std::string>((*needed[0])[0]) + "'",
-                            REDEF_ERROR,
-                            this->m_line
+                        ErrorMessage::IDENTIFIER_ALREADY_DECLARED_ERROR(
+                            std::get<std::string>((*needed[0])[0])),
+                        REDEF_ERROR,
+                        this->m_line
                     );
                 }
 
@@ -54,10 +53,9 @@ void Parser_t::parse()
                         this->m_bracestack.curly_brace.size() - 1] ==
                         Brace_t::NAMESPACE) {
                         Error::GenericError_nl(
-                                "Cannot define a variable naked under a "
-                                "namespace",
-                                NAMESPACE_ERROR,
-                                this->m_line
+                            ErrorMessage::VARIABLE_NAMESPACE_NAKED_ERROR,
+                            NAMESPACE_ERROR,
+                            this->m_line
                         );
                     }
                 }
@@ -67,9 +65,9 @@ void Parser_t::parse()
                                    " = ";
 
                 this->m_scope.add_child(Object_t(
-                        std::get<std::string>((*needed[0])[0]),
-                        std::get<std::string>((*needed[2])[0]),
-                        ObjectType_t::OBJ_TYPE_VAR
+                    std::get<std::string>((*needed[0])[0]),
+                    std::get<std::string>((*needed[2])[0]),
+                    ObjectType_t::OBJ_TYPE_VAR
                 ));
                 break;
             }
@@ -90,10 +88,10 @@ void Parser_t::parse()
 
                         if (scope_root == nullptr) {
                             Error::GenericError_nl(
-                                    "Namespace identifier not found: '" + \
-                                    begin_scope_id + "'",
-                                    ERROR_SYNTAX,
-                                    this->m_line
+                                ErrorMessage::NAMESPACE_IDENT_NOT_FOUND(
+                                    begin_scope_id),
+                                ERROR_SYNTAX,
+                                this->m_line
                             );
                         }
 
@@ -115,12 +113,12 @@ void Parser_t::parse()
 
                                 if (!this->m_scope.traverse(child_name)) {
                                     Error::GenericError_nl(
-                                            "Namespace identifier ('" +     \
-                                            child_name +                    \
-                                            "') not found in namespace '" + \
-                                            this->m_scope.get()->name +"'",
-                                            ERROR_SYNTAX,
-                                            this->m_line
+                                        ErrorMessage::IDENT_NOT_IN_NAMESPACE(
+                                            this->m_scope.get()->name,
+                                            child_name
+                                        ),
+                                        ERROR_SYNTAX,
+                                        this->m_line
                                     );
                                 }
 
@@ -139,46 +137,46 @@ void Parser_t::parse()
                         continue;
                     }
                 }
+
                 std::vector<Token_t*> function_data = this->expect(
-                        &i,
-                        PARSER_EXPECT_ARG_DECL,
-                        "",
-                        false,
-                        &func_arg
+                    &i,
+                    PARSER_EXPECT_ARG_DECL,
+                    "",
+                    false,
+                    &func_arg
                 );
+
+                const std::string name = std::get<std::string>(tok[0]);
+
 
                 if (func_arg) {
                     if (!fn_def && this->m_bracestack.curly_brace_top()
                         != Brace_t::STRUCTURE) {
                         Error::GenericError_nl(
-                                "Variable decleration without `let` outside "
-                                "function definition",
-                                ERROR_SYNTAX,
-                                this->m_line
+                            ErrorMessage::VAR_DECL_WITHOUT_LET,
+                            ERROR_SYNTAX,
+                            this->m_line
                         );
                     }
 
-                    const std::string name = std::get<std::string>(tok[0]);
 
                     this->c_program += this->produce_type(*function_data[1]) \
                         + " " + name;
 
                     this->m_scope.add_child(Object_t(
-                            std::get<std::string>(tok[0]),
-                            std::get<std::string>((*function_data[1])[0]),
-                            ObjectType_t::OBJ_TYPE_VAR)
+                        name,
+                        std::get<std::string>((*function_data[1])[0]),
+                        ObjectType_t::OBJ_TYPE_VAR)
                     );
                 } else {
-                    this->c_program += std::get<std::string>(tok[0]);
+                    this->c_program += name;
                 }
 
-                if (this->m_scope.contains_node_up(std::get<std::string>(
-                    tok[0])) == nullptr) {
+                if (this->m_scope.contains_node_up(name) == nullptr) {
                     Error::GenericError_nl(
-                            "Identifier not defined: '" + \
-                            std::get<std::string>(tok[0]) + "'",
-                            ERROR_SYNTAX,
-                            this->m_line
+                        ErrorMessage::IDENT_NOT_DEFINED(name),
+                        ERROR_SYNTAX,
+                        this->m_line
                     );
                 }
 
@@ -187,18 +185,17 @@ void Parser_t::parse()
             case TK_FN: {
                 if (i + 1 >= this->m_tokens.size()) {
                     Error::GenericError_nl(
-                            "Unexpected EOF while parsing tokens",
-                            ERROR_EOF,
-                            this->m_line
+                        ErrorMessage::UNEXPECTED_EOF,
+                        ERROR_EOF,
+                        this->m_line
                     );
                 }
                 Token_t& func_ident = this->m_tokens[i + 1];
                 if (func_ident.get_type() != TK_IDENTIFIER) {
                     Error::GenericError_nl(
-                            "Expected identifier after `fn` in function"
-                            "definition",
-                            ERROR_SYNTAX,
-                            this->m_line
+                        ErrorMessage::EXPECTED_IDENT_AFTER_FN,
+                        ERROR_SYNTAX,
+                        this->m_line
                     );
                 }
 
@@ -210,19 +207,17 @@ void Parser_t::parse()
                     iter++) {
                     if (this->m_tokens[iter].get_type() == TK_LCPAREN) {
                         if (!found_type_op) {
-                            std::string error = "Operator `-> [typename]` "
-                                                "required for complete "
-                                                "function definition";
-
-                            Error::GenericError_nl(error,  ERROR_SYNTAX,
-                                                   this->m_line);
+                            Error::GenericError_nl(
+                                ErrorMessage::FUNC_DEF_REQUIRES,
+                                ERROR_SYNTAX,
+                                this->m_line);
                         }
                     }
                     if (iter + 2 >= this->m_tokens.size()) {
                         Error::GenericError_nl(
-                                "Unexpected EOF while parsing tokens",
-                                ERROR_EOF,
-                                this->m_line
+                            ErrorMessage::UNEXPECTED_EOF,
+                            ERROR_EOF,
+                            this->m_line
                         );
                     }
                     if (this->m_tokens[iter].get_type() == TK_MINUS && \
@@ -240,13 +235,15 @@ void Parser_t::parse()
                 if (type_op != nullptr) {
                     // first, check if another identifier of the same name
                     // exists
-                    if (this->m_scope.contains_node_up(std::get<std::string>(
-                                func_ident[0]))) {
+                    const std::string func_name = std::get<std::string>(
+                        func_ident[0]);
+                    if (this->m_scope.contains_node_up(func_name)) {
                         Error::GenericError_nl(
-                                "Identifier already declared: '" + \
-                                std::get<std::string>(func_ident[0]) + "'",
-                                REDEF_ERROR,
-                                this->m_line
+                            ErrorMessage::IDENTIFIER_ALREADY_DECLARED_ERROR(
+                                func_name
+                            ),
+                            REDEF_ERROR,
+                            this->m_line
                         );
                     }
                     std::string namespace_prefix = "";
@@ -259,11 +256,10 @@ void Parser_t::parse()
                     const std::string mangle_str = Common::garbage(10);
 
                     this->c_program += this->produce_type(*type_op) + " " + \
-                        namespace_prefix + std::get<std::string>(
-                            func_ident[0]);
+                        namespace_prefix + func_name;
 
                     Object_t function_object(
-                            std::get<std::string>(func_ident[0]),
+                            func_name,
                             std::get<std::string>((*type_op)[0]),
                             ObjectType_t::OBJ_TYPE_FUNC
                     );
@@ -274,8 +270,7 @@ void Parser_t::parse()
                     }
 
                     this->m_scope.add_child(function_object);
-                    this->m_scope.traverse(std::get<std::string>(
-                            func_ident[0]));
+                    this->m_scope.traverse(func_name);
                     brace_skip++;
                     fn_def = true;
                     fn_active = 3;
@@ -294,9 +289,9 @@ void Parser_t::parse()
                         || (iden.get_type() != TK_IDENTIFIER && iden.get_type()
                             != TK_STRING)) {
                         Error::GenericError_nl(
-                                "Unexpected token while parsing",
-                                ERROR_SYNTAX,
-                                this->m_line
+                            ErrorMessage::UNEXPECTED_TOKEN,
+                            ERROR_SYNTAX,
+                            this->m_line
                         );
                     }
 
@@ -308,33 +303,29 @@ void Parser_t::parse()
                     }
 
                     if (this->m_scope.contains_node_up(identifier)) {
-                        Error::GenericError_nl(
-                                "Identifier already declared: '" + \
-                                identifier + "'",
-                                REDEF_ERROR,
-                                this->m_line
-                        );
+                        i ++;
+                        continue;
                     }
 
                     switch (type.get_type()) {
                         case TK_FN_EXT: {
                             this->m_scope.add_child(
-                                    Object_t(identifier, "none",
-                                             ObjectType_t::OBJ_TYPE_FUNC)
+                                Object_t(identifier, "none",
+                                ObjectType_t::OBJ_TYPE_FUNC)
                             );
                             break;
                         }
                         case TK_VR_EXT: {
                             this->m_scope.add_child(
-                                    Object_t(identifier, "none",
-                                             ObjectType_t::OBJ_TYPE_VAR)
+                                Object_t(identifier, "none",
+                                     ObjectType_t::OBJ_TYPE_VAR)
                             );
                             break;
                         }
                         case TK_STRUCT_EXT: {
                             this->m_scope.add_child(
-                                    Object_t(identifier, "none",
-                                             ObjectType_t::OBJ_TYPE_STRUCT)
+                                Object_t(identifier, "none",
+                                    ObjectType_t::OBJ_TYPE_STRUCT)
                             );
                             break;
                         }
@@ -343,26 +334,26 @@ void Parser_t::parse()
                     i += 2;
                 } else {
                     Error::GenericError_nl(
-                            "Unexpected EOF while parsing tokens",
-                            ERROR_EOF,
-                            this->m_line
+                        ErrorMessage::UNEXPECTED_EOF,
+                        ERROR_EOF,
+                        this->m_line
                     );
                 }
                 break;
             }
             case TK_FN_EXT: {
                 Error::GenericError_nl(
-                        "Function keyword may only be used in extern blocks",
-                        ERROR_SYNTAX,
-                        this->m_line
+                    ErrorMessage::ONLY_IN_EXTERN_BLOCKS("Function"),
+                    ERROR_SYNTAX,
+                    this->m_line
                 );
                 break;
             }
             case TK_VR_EXT: {
                 Error::GenericError_nl(
-                        "Variable keyword may only be used in extern blocks",
-                        ERROR_SYNTAX,
-                        this->m_line
+                    ErrorMessage::ONLY_IN_EXTERN_BLOCKS("Variable"),
+                    ERROR_SYNTAX,
+                    this->m_line
                 );
                 break;
             }
@@ -398,9 +389,9 @@ void Parser_t::parse()
                 if (this->m_indent_level < 0 ||
                     this->m_bracestack.curly_brace.size() == 0) {
                     Error::GenericError_nl(
-                            "Stray '}' without matching '{'",
-                            BRACE_ERROR,
-                            this->m_line
+                        ErrorMessage::STRAY_WITHOUT('}'),
+                        BRACE_ERROR,
+                        this->m_line
                     );
                 }
 
@@ -422,9 +413,9 @@ void Parser_t::parse()
             case TK_RSPAREN: {
                 if (this->m_bracestack.square_brace.size() == 0) {
                     Error::GenericError_nl(
-                            "Stray ']' without matching '['",
-                            BRACE_ERROR,
-                            this->m_line
+                        ErrorMessage::STRAY_WITHOUT(']'),
+                        BRACE_ERROR,
+                        this->m_line
                     );
                 }
                 this->m_bracestack.square_brace.pop_back();
@@ -439,9 +430,9 @@ void Parser_t::parse()
             case TK_RPAREN: {
                 if (this->m_bracestack.brace.size() == 0) {
                     Error::GenericError_nl(
-                            "Stray ')' without matching '('",
-                            BRACE_ERROR,
-                            this->m_line
+                        ErrorMessage::STRAY_WITHOUT(')'),
+                        BRACE_ERROR,
+                        this->m_line
                     );
                 }
                 this->m_bracestack.brace.pop_back();
@@ -528,8 +519,7 @@ void Parser_t::parse()
                 std::vector<Token_t*> expected = this->expect(
                         &i,
                         PARSER_EXPECT_STRUCTURE,
-                        "Struct expected an identifier followed by a "
-                        "curly brace"
+                        ErrorMessage::STRUCT_EXPECT_IDENT
                 );
                 const std::string name = std::get<std::string>(
                     (*expected[0])[0]);
@@ -545,9 +535,9 @@ void Parser_t::parse()
             }
             case TK_UNION: {
                 std::vector<Token_t*> expected = this->expect(
-                        &i,
-                        PARSER_EXPECT_STRUCTURE,
-                        "Union expected an identifier followed by a curly :brace"
+                    &i,
+                    PARSER_EXPECT_STRUCTURE,
+                    ErrorMessage::UNION_EXPECT_IDENT
                 );
                 const std::string name = std::get<std::string>(
                     (*expected[0])[0]);
@@ -567,10 +557,9 @@ void Parser_t::parse()
                     if (this->m_tokens[i + 1].get_type() != TK_IDENTIFIER ||
                         this->m_tokens[i + 2].get_type() != TK_LCPAREN) {
                         Error::GenericError_nl(
-                                "Namespace expected an identifier and then an"
-                                "opening curly brace",
-                                ERROR_SYNTAX,
-                                this->m_line
+                            ErrorMessage::NAMESPACE_EXP_IDENT_OC,
+                            ERROR_SYNTAX,
+                            this->m_line
                         );
                     }
                     std::string& ident = std::get<std::string>(
@@ -578,10 +567,10 @@ void Parser_t::parse()
 
                     if (this->m_scope.contains_node_up(ident)) {
                         Error::GenericError_nl(
-                                "Identifier already declared: '" + \
-                                ident + "'",
-                                REDEF_ERROR,
-                                this->m_line
+                            ErrorMessage::IDENTIFIER_ALREADY_DECLARED_ERROR(
+                                ident),
+                            REDEF_ERROR,
+                            this->m_line
                         );
                     }
 
@@ -596,9 +585,9 @@ void Parser_t::parse()
                     i += 2;
                 } else {
                     Error::GenericError_nl(
-                            "Unexpected EOF while parsing tokens",
-                            ERROR_EOF,
-                            this->m_line
+                        ErrorMessage::UNEXPECTED_EOF,
+                        ERROR_EOF,
+                        this->m_line
                     );
                 }
                 break;
@@ -618,8 +607,25 @@ void Parser_t::parse()
                 break;
             }
 
+            case TK_CHAR: {
+                const std::string character_data = std::get<std::string>(
+                    tok[0]
+                );
+                if (character_data.size() > 1) {
+                    // characters can only be one character large
+                    Error::GenericError_nl(
+                        ErrorMessage::CHAR_LITERAL_TOO_LARGE,
+                        CHAR_ERROR,
+                        this->m_line
+                    );
+                }
+
+                this->c_program += "'" + character_data + "'";
+                break;
+            }
+
             default: {
-                std::cout << "Token type not understood: " << tok.get_type() \
+                std::cerr << "Token type not understood: " << tok.get_type() \
                     << std::endl;
                 break;
             }
@@ -629,26 +635,30 @@ void Parser_t::parse()
 
     if (this->m_bracestack.curly_brace.size() > 0) {
         Error::GenericError_nl(
-                "Unmatched curly braces in file",
-                BRACE_ERROR,
-                0
+            ErrorMessage::UNMATCHED_IN_FILE("curly"),
+            BRACE_ERROR,
+            0
         );
     }
 
     if (this->m_bracestack.square_brace.size() > 0) {
         Error::GenericError_nl(
-                "Unmatched square braces in file",
-                BRACE_ERROR,
-                0
+            ErrorMessage::UNMATCHED_IN_FILE("square"),
+            BRACE_ERROR,
+            0
         );
     }
 
     if (this->m_bracestack.brace.size() > 0) {
         Error::GenericError_nl(
-                "Unmatched braces in file",
-                BRACE_ERROR,
-                0
+            ErrorMessage::UNMATCHED_IN_FILE(""),
+            BRACE_ERROR,
+            0
         );
+    }
+
+    if (this->language == "__cplusplus") {
+        this->c_program += "}"; // END_EXTERN_C
     }
 
     this->m_scope.free();
@@ -670,11 +680,11 @@ std::vector<Token_t*> Parser_t::expect(
     std::vector<Token_t*> found;
     (*i) ++;
 
-    if ((*i + expected.size() + 1) >= this->m_tokens.size()) {
+    if ((*i + expected.size() + 1) >= this->m_tokens.size() && err) {
         Error::GenericError_nl(
-                "Unexpected EOF while parsing tokens",
-                ERROR_EOF,
-                this->m_line
+            ErrorMessage::UNEXPECTED_EOF,
+            ERROR_EOF,
+            this->m_line
         );
     }
     for (auto el : expected) {
@@ -704,9 +714,9 @@ const Token_t& Parser_t::visit_token(uint64_t i)
 {
     if (i >= this->m_tokens.size()) {
         Error::GenericError_nl(
-                "Unexpected EOF while parsing tokens",
-                ERROR_EOF,
-                this->m_line
+            ErrorMessage::UNEXPECTED_EOF,
+            ERROR_EOF,
+            this->m_line
         );
     }
     return this->m_tokens[i];
@@ -746,4 +756,13 @@ std::string Parser_t::produce_type(Token_t& token)
     }
 
     return type_name;
+}
+
+void Parser_t::set_language(const std::string& extension)
+{
+    if (extension == ".cpp") {
+        this->c_program = "extern \"C\" {\n" + this->c_program;
+        this->language = "__cplusplus";
+        this->c_filename = Common::replace_extension(this->c_filename, ".cpp");
+    }
 }

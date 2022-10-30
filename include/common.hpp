@@ -66,6 +66,9 @@ namespace Common
     /* removes the old file ending (if it has one) and appends `.c`
      * on the end */
     std::string c_filename(const std::string& old_filename);
+    /* remove the old filename and add the new filename parameter */
+    std::string replace_extension(const std::string& old_filename,
+        const std::string& extension);
 
     /* function to return the default code for the C program*/
     const std::string default_c(bool nostd = false);
@@ -85,4 +88,7 @@ namespace Common
 
     /* outputs the version of the executable */
     const std::string version();
+
+    /* gets the file extension of the filetype */
+    const std::string file_extension(const std::string& ft);
 }

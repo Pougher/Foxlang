@@ -11,6 +11,7 @@
 #define NAMESPACE_ERROR "NamespaceError"
 #define IMPORT_ERROR    "ImportError"
 #define IO_ERROR        "IOError"
+#define CHAR_ERROR      "CharError"
 #define JSON_ERROR      "JSONError"
 
 /* Namespace to contain all error functions */

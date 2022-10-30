@@ -11,6 +11,7 @@
 #include "error.hpp"
 #include "action_string.hpp"
 #include "action_number.hpp"
+#include "action_char.hpp"
 #include "state.hpp"
 #include "common.hpp"
 

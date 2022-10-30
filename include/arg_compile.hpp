@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "token.hpp"
+
 #include "argument_action.hpp"
 #include "lexer.hpp"
 #include "parser.hpp"
@@ -17,7 +19,11 @@ class ArgumentActionCompile_t : public ArgumentAction_t {
         std::string file = File::load_file(argv[0]) + "\n";
         file = ImportHandler::parse(file);
         Lexer_t lex(file);
+
         lex.lex();
+        for (Token_t& tok : lex.extract()) {
+            tok.print();
+        }
 
         // parse the tokens
         Parser_t parser(lex.extract(), Common::c_filename(argv[0]));

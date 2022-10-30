@@ -10,6 +10,7 @@
 #include "import_handler.hpp"
 #include "parser.hpp"
 #include "lexer.hpp"
+#include "command_exec.hpp"
 
 class ArgumentActionBuild_t : public ArgumentAction_t {
 public:
@@ -35,10 +36,40 @@ public:
         Lexer_t lex(file); lex.lex();
         Parser_t parser(lex.extract(), build_parser.get_output_dir() + "/" + \
             Common::c_filename(build_parser.get_output_name()));
+
+        parser.set_language(Common::file_extension(
+            build_parser.get_output_type()));
         parser.parse();
         parser.write();
+
         std::cout << "[FOX BUILD] Successfully built project " << \
             build_parser.get_project_name() << std::endl;
+
+        // compilation step
+        std::cout << "[FOX BUILD] Running compile command..." << std::endl;
+
+        std::string command = build_parser.get_compile_command() +         \
+                              " build/" + build_parser.get_output_name() + \
+                              Common::file_extension(
+                                  build_parser.get_output_type()) +        \
+                              " -o build/" +                               \
+                              build_parser.get_project_name();
+
+        for (std::string& opt : build_parser.get_compile_options()) {
+            command += " " + opt;
+        }
+
+        std::cout << "[FOX BUILD] Execute: " << command << std::endl;
+
+        int result = CommandExec::execute(command) / 256;
+        if (result == 0) {
+            std::cout << "[FOX BUILD] Compiled project successfully"
+                << std::endl;
+        } else {
+            std::cout << "[FOX BUILD] Compilation did not complete (exit " <<
+                "code " << result << ")" << std::endl;
+            std::exit(-1);
+        }
     }
 
     bool requirements(int argc) override

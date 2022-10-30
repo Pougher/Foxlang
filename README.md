@@ -1,6 +1,6 @@
 # Fox programming language
 
-Lightweight programming language written in C++ in under 3000 lines.
+Lightweight programming language written in C++ in under 4000 lines.
 
 ### Current Version: 1.0.2a2
 

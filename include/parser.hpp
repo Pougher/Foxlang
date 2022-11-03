@@ -46,6 +46,7 @@ private:
     /* Variable that contains all of the tokens to be parsed */
     std::vector<Token_t> m_tokens;
     std::string c_program;      /* the finished C program */
+    std::string c_buffer;       /* buffer to hold the program temporarily */
     std::string c_filename;     /* filename of the C program */
     std::string language;       /* sets the programming language */
     Scope_t m_scope;            /* scope tree for all variables */
@@ -53,4 +54,5 @@ private:
     /* the current indentation level of the C program */
     int64_t m_indent_level;
     BraceStack_t m_bracestack;  /* stack to contain all braces */
+    bool m_array;               /* array active */
 };

@@ -21,9 +21,6 @@ class ArgumentActionCompile_t : public ArgumentAction_t {
         Lexer_t lex(file);
 
         lex.lex();
-        for (Token_t& tok : lex.extract()) {
-            tok.print();
-        }
 
         // parse the tokens
         Parser_t parser(lex.extract(), Common::c_filename(argv[0]));

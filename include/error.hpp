@@ -13,6 +13,7 @@
 #define IO_ERROR        "IOError"
 #define CHAR_ERROR      "CharError"
 #define JSON_ERROR      "JSONError"
+#define ARRAY_ERROR     "ArrayError"
 
 /* Namespace to contain all error functions */
 namespace Error

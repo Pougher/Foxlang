@@ -189,7 +189,7 @@ void Common::usage()
 
 const std::string Common::version()
 {
-    return "Fox C transpiler 1.0.2a4";
+    return "Fox C transpiler 1.0.2b1";
 }
 
 const std::string Common::file_extension(const std::string& ft)
@@ -204,4 +204,17 @@ const std::string Common::file_extension(const std::string& ft)
     if (ft == "TS") return ".ts";
     if (ft == "PYTHON") return ".py";
     return "unknown-ft";
+}
+
+bool Common::is_float_string(const std::string& string)
+{
+    try {
+        std::string::size_type sz;
+        double x = std::stod(string);
+        (void) x;
+        (void) sz;
+        return true;
+    } catch(std::exception& ex) {
+        return false;
+    }
 }

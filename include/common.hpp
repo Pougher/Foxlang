@@ -91,4 +91,7 @@ namespace Common
 
     /* gets the file extension of the filetype */
     const std::string file_extension(const std::string& ft);
+
+    /* returns true if the string is a float, returns false for anything else */
+    bool is_float_string(const std::string& string);
 }

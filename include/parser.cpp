@@ -8,6 +8,7 @@ Parser_t::Parser_t(std::vector<Token_t>& tokens, const std::string& filename)
     this->c_program = Common::default_c();
     this->m_line = 1; // lines start at one
     this->m_indent_level = 0;
+    this->m_array = false;
 }
 
 void Parser_t::parse()
@@ -61,14 +62,32 @@ void Parser_t::parse()
                 }
 
                 this->c_program += this->produce_type(*needed[2]) + " " +   \
-                                   std::get<std::string>((*needed[0])[0]) + \
-                                   " = ";
+                                   std::get<std::string>((*needed[0])[0]);
 
                 this->m_scope.add_child(Object_t(
                     std::get<std::string>((*needed[0])[0]),
                     std::get<std::string>((*needed[2])[0]),
                     ObjectType_t::OBJ_TYPE_VAR
                 ));
+
+                // check if an array is being defined
+                if (i + 1 < this->m_tokens.size()) {
+                    if (this->m_tokens[i + 1].get_type() ==
+                        TokenType_t::TK_LSPAREN) {
+                        // array begin
+                        this->m_array = true;
+                        this->c_buffer = this->c_program;
+                        this->c_program = "[";
+                        this->m_bracestack.square_brace.push_back(
+                            Brace_t::NONE);
+                        i++;
+                    }
+                }
+
+                if (!this->m_array) {
+                    this->c_program += " = ";
+                }
+
                 break;
             }
             case TK_IDENTIFIER: {
@@ -418,8 +437,21 @@ void Parser_t::parse()
                         this->m_line
                     );
                 }
+                if (this->m_array) {
+                    if (i + 1 < this->m_tokens.size()) {
+                        if (this->m_tokens[i + 1].get_type() == TK_LSPAREN) {
+                            this->c_program += "]";
+                            this->m_bracestack.square_brace.pop_back();
+                            i ++;
+                            continue;
+                        }
+                    }
+                    this->c_program = this->c_buffer + this->c_program + "] = ";
+                    this->m_array = false;
+                } else {
+                    this->c_program += "]";
+                }
                 this->m_bracestack.square_brace.pop_back();
-                this->c_program += "]";
                 break;
             }
             case TK_LPAREN: {

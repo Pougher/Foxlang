@@ -37,10 +37,10 @@ const std::string ImportHandler::recursive_parse(std::string& str,
             if (c == ' ' || c == '\t') {
                 // there should not be any whitespace characters in an import
                 Error::GenericError_nl(
-                        "Whitespace should not be present in an import"
-                        "statement",
-                        IMPORT_ERROR,
-                        line
+                    "Whitespace should not be present in an import"
+                    "statement",
+                    IMPORT_ERROR,
+                    line
                 );
             }
             import_string += c;
@@ -48,18 +48,18 @@ const std::string ImportHandler::recursive_parse(std::string& str,
         } else if (import_active) {
             if (import_string == "") {
                 Error::GenericError_nl(
-                        "Import statement requires a filename",
-                        IMPORT_ERROR,
-                        line
+                    "Import statement requires a filename",
+                    IMPORT_ERROR,
+                    line
                 );
             }
 
             if (!std::filesystem::exists(import_string)) {
                 Error::GenericError_nl(
-                        std::string("Could not find file for import: '") + \
-                        import_string + "'",
-                        IO_ERROR,
-                        line
+                    std::string("Could not find file for import: '") + \
+                    import_string + "'",
+                    IO_ERROR,
+                    line
                 );
             }
 

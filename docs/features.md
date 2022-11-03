@@ -2,7 +2,7 @@
 
 ### New for version 1.0.2
 - C standard lib supprt
-- Arrays (TBD)
+- Arrays
 - Minor code refactor
 - Char type
 - C++ output option

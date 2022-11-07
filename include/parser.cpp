@@ -303,7 +303,7 @@ void Parser_t::parse()
                     if ((type.get_type() != TK_FN_EXT && type.get_type() !=
                          TK_VR_EXT && type.get_type() != TK_LIB_EXT &&
                          type.get_type() != TK_TYPE_EXT && type.get_type()
-                         != TK_STRUCT_EXT)
+                         != TK_STRUCT_EXT && type.get_type() != TK_C_EXT)
                         || (iden.get_type() != TK_IDENTIFIER && iden.get_type()
                             != TK_STRING)) {
                         Error::GenericError_nl(
@@ -316,6 +316,11 @@ void Parser_t::parse()
                     std::string& identifier = std::get<std::string>(iden[0]);
                     if (type.get_type() == TK_LIB_EXT) {
                         this->c_program += "#include \"" + identifier + "\"";
+                        i += 3;
+                        continue;
+                    }
+                    if (type.get_type() == TK_C_EXT) {
+                        this->c_program += identifier;
                         i += 3;
                         continue;
                     }

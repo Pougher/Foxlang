@@ -3,7 +3,7 @@
 ### New for version 1.0.3
 - Output optimization (TBD)
 - No std build option
-- Inline C code (TBD)
+- Inline C code
 - String escape sequences
 
 ### New for version 1.0.2

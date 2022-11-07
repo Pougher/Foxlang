@@ -189,7 +189,7 @@ void Common::usage()
 
 const std::string Common::version()
 {
-    return "Fox C transpiler 1.0.2";
+    return "Fox C transpiler 1.0.3a2";
 }
 
 const std::string Common::file_extension(const std::string& ft)

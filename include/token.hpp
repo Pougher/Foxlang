@@ -65,6 +65,7 @@ typedef enum {
     TK_RETURN,
     TK_STRUCT_EXT,
     TK_TYPE_EXT,
+    TK_C_EXT,
     TK_CHAR
 } TokenType_t;
 

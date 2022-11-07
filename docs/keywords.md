@@ -280,6 +280,7 @@ The following things may be interfaced with Fox:
 - Types: `extern type <identifier>`
 - Structures (union and struct): `extern structure <identifier>`
 - Variables: `extern variable <identifier>`
+- C code: `extern C <string>`
 
 ### Namespaces
 Namespaces are a Fox exclusive feature. Namespaces allow for functions or variables to be grouped based off of their

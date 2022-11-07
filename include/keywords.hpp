@@ -35,6 +35,7 @@ static const std::map<const std::string, Token_t> FOX_KEYWORDS = {
     { "return",     Token_t(TokenType_t::TK_RETURN)     },
     { "type",       Token_t(TokenType_t::TK_TYPE_EXT)   },
     { "structure",  Token_t(TokenType_t::TK_STRUCT_EXT) },
+    { "C",          Token_t(TokenType_t::TK_C_EXT)      },
     /* not strictly keywords */
     { "(",          Token_t(TokenType_t::TK_LPAREN)     },
     { ")",          Token_t(TokenType_t::TK_RPAREN)     },

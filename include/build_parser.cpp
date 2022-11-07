@@ -63,6 +63,10 @@ BuildParser_t::BuildParser_t(const char* filename)
     } else {
         this->output_type = "C"; // default
     }
+
+    if (file_json["project"].contains("no_std")) {
+        this->no_std = file_json["project"]["no_std"];
+    }
 }
 
 std::string BuildParser_t::strip_quotes(std::string str)
@@ -136,3 +140,4 @@ std::vector<std::string>& BuildParser_t::get_compile_options()
 bool BuildParser_t::get_run_command() { return this->run_compile_command; }
 std::string& BuildParser_t::get_compile_command()
 { return this->compile_command; }
+bool BuildParser_t::get_no_std() { return this->no_std; }

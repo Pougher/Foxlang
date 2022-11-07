@@ -124,7 +124,7 @@ const std::string Common::default_c(bool nostd)
                "typedef float f32;\n"
                "typedef double f64;\n\n";
     }
-    return "#include <stdint.h>\n#include <stdio.h>\n\n"
+    return "#include <stdint.h>\n\n"
            "typedef uint64_t u64;\n"
            "typedef uint32_t u32;\n"
            "typedef uint16_t u16;\n"

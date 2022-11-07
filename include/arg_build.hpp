@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <chrono>
 
 #include "argument_action.hpp"
 #include "common.hpp"
@@ -33,14 +34,23 @@ public:
         std::string file = File::load_file("src/main.fox") + "\n";
         file = ImportHandler::parse(file);
 
+        // time the codegen process
+        auto start = std::chrono::high_resolution_clock::now();
+
         Lexer_t lex(file); lex.lex();
         Parser_t parser(lex.extract(), build_parser.get_output_dir() + "/" + \
             Common::c_filename(build_parser.get_output_name()));
 
         parser.set_language(Common::file_extension(
             build_parser.get_output_type()));
+        parser.set_default_c(Common::default_c(build_parser.get_no_std()));
         parser.parse();
         parser.write();
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::cout << "[FOX BUILD] Transpilation took " <<
+            (std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+            .count() / 1000.0) << "s" << std::endl;
 
         std::cout << "[FOX BUILD] Successfully built project " << \
             build_parser.get_project_name() << std::endl;
@@ -61,6 +71,9 @@ public:
 
         std::cout << "[FOX BUILD] Execute: " << command << std::endl;
 
+        // time the compile command process
+        start = std::chrono::high_resolution_clock::now();
+
         int result = CommandExec::execute(command) / 256;
         if (result == 0) {
             std::cout << "[FOX BUILD] Compiled project successfully"
@@ -70,6 +83,10 @@ public:
                 "code " << result << ")" << std::endl;
             std::exit(-1);
         }
+        end = std::chrono::high_resolution_clock::now();
+        std::cout << "[FOX BUILD] Compile command took " <<
+            (std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+            .count() / 1000.0) << "s" << std::endl;
     }
 
     bool requirements(int argc) override

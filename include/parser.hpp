@@ -42,6 +42,8 @@ public:
     /* function to setup the parser to produce another language's code from
      * the file extension */
     void set_language(const std::string& extension);
+    /* sets the default C code for the program */
+    void set_default_c(const std::string& c);
 private:
     /* Variable that contains all of the tokens to be parsed */
     std::vector<Token_t> m_tokens;

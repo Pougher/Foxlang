@@ -5,7 +5,6 @@ Parser_t::Parser_t(std::vector<Token_t>& tokens, const std::string& filename)
 {
     this->m_tokens = std::move(tokens);
     this->c_filename = filename;
-    this->c_program = Common::default_c();
     this->m_line = 1; // lines start at one
     this->m_indent_level = 0;
     this->m_array = false;
@@ -797,4 +796,8 @@ void Parser_t::set_language(const std::string& extension)
         this->language = "__cplusplus";
         this->c_filename = Common::replace_extension(this->c_filename, ".cpp");
     }
+}
+
+void Parser_t::set_default_c(const std::string& c) {
+    this->c_program = c;
 }

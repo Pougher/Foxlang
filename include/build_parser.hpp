@@ -79,9 +79,10 @@ public:
     std::string& get_output_name();
     std::string& get_output_dir();
     std::vector<std::string>& get_compile_options();
-    bool get_run_command();
     std::string& get_compile_command();
     std::string& get_output_type();
+    bool get_run_command();
+    bool get_no_std();
 private:
     /* project attributes */
     std::string project_name;
@@ -90,6 +91,7 @@ private:
 
     /* compilation attributes */
     bool run_compile_command;
+    bool no_std;
     std::vector<std::string> compile_options;
     std::string compile_command;
     std::string output_type;

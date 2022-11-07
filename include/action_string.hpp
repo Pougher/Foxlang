@@ -17,4 +17,6 @@ public:
 private:
     /* variable for storing the current string data */
     std::string m_expr;
+    /* if a string has been escaped, this is set to true. */
+    bool m_escape;
 };
